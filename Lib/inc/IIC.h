@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-#define SDA P27
-#define SCL P26
+#define SDA P24
+#define SCL P25
 
 extern void IIC_Start();
 extern void IIC_Stop();

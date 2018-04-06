@@ -2,6 +2,7 @@
 #define ONBOARD_IIC_H
 
 #include "STC8.h"
+#include "intrins.h"
 
 #define obSDA =P14;
 #define obSCL =P15;
@@ -22,7 +23,7 @@
 #define OBIIC_Stop() I2CMSCR = 0x06;OBIIC_Wait()
 
 
-
+void delay();
 extern char OBIIC_RecvData();
 
 

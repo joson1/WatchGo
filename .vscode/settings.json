@@ -3,6 +3,7 @@
     "C_Cpp.intelliSenseEngineFallback": "Enabled",
     "files.associations": {
         "oled.h": "c",
-        "iic.h": "c"
+        "iic.h": "c",
+        "onboard_iic.h": "c"
     }
 }

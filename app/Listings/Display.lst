@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 1   
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/06/2018 12:37:07 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DISPLAY
@@ -62,7 +62,7 @@ line level    source
   51   1      
   52   1      }
   53          
-C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 2   
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/06/2018 12:37:07 PAGE 2   
 
   54          // void displayColon()
   55          // {
@@ -126,7 +126,7 @@ line level    source
  112   1      }
  113          
  114          void DisplayOFF()
-C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 3   
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/06/2018 12:37:07 PAGE 3   
 
  115          {
  116   1        OLED_WR_Byte(0xae,OLED_CMD);

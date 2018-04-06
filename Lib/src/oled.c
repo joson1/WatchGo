@@ -1,34 +1,72 @@
 #include "oled.h"
 
+
+
+
+void delay()
+{
+    int i;
+    for(i=0;i<3000;i++)
+    {
+        _nop_();
+        _nop_();
+        _nop_();
+        _nop_(); 
+    }
+
+}
+
+
+
 void OLED_WR_Byte(unsigned char Data,bit CD) 
 {
     if(CD)
     {
-        IIC_Start();
-        IIC_WR_Byte(0x78);			//D/C#=0; R/W#=0
-				SCL=1;
-				SCL=0;
-        IIC_WR_Byte(0x40);			//write data
-				SCL=1;
-				SCL=0;
-        IIC_WR_Byte(Data);
-				SCL=1;
-				SCL=0;
-        IIC_Stop();
+        // IIC_Start();
+        // IIC_WR_Byte(0x78);			//D/C#=0; R/W#=0
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_WR_Byte(0x40);			//write data
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_WR_Byte(Data);
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_Stop();
+
+		OBIIC_Start();
+		OBIIC_SendData(0x78);
+		OBIIC_RecvACK();
+		OBIIC_SendData(0x40);
+		OBIIC_RecvACK();
+		OBIIC_SendData(Data);
+		OBIIC_RecvACK();
+		OBIIC_Stop();
+
+
+
     }
     else
     {
-        IIC_Start();
-        IIC_WR_Byte(0x78); //salave address SA0=0
-				SCL=1;
-				SCL=0;
-        IIC_WR_Byte(0x00);
-				SCL=1;
-				SCL=0;
-        IIC_WR_Byte(Data);
-				SCL=1;
-				SCL=0;
-        IIC_Stop();
+        // IIC_Start();
+        // IIC_WR_Byte(0x78); //salave address SA0=0
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_WR_Byte(0x00);
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_WR_Byte(Data);
+		// 		SCL=1;
+		// 		SCL=0;
+        // IIC_Stop();
+		OBIIC_Start();
+		OBIIC_SendData(0x78);
+		OBIIC_RecvACK();
+		OBIIC_SendData(0x00);
+		OBIIC_RecvACK();
+		OBIIC_SendData(Data);
+		OBIIC_RecvACK();
+		OBIIC_Stop();
     }
 
 }
@@ -79,7 +117,7 @@ void OLED_Clear()
 //初始化SSD1306					    
 void OLED_Init(void)
 { 	
-    Delayms(100);
+    delay();
     OLED_WR_Byte(0xAE,OLED_CMD);//关闭显示
 	
 	OLED_WR_Byte(0x40,OLED_CMD);//---set low column address

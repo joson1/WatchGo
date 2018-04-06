@@ -17,6 +17,12 @@ enum FucState
 void main()
 {
 
+
+	P_SW2=0xb0;
+	I2CCFG=0xe0;
+	I2CMSST=0x00;
+
+
 	//char Temperature=0;
 	//char ID;
 

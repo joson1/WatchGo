@@ -25,18 +25,19 @@ E:\OLEDTEST\app\oledANDmax30100.uvproj
 Project File Date:  02/01/2018
 
 <h2>Output:</h2>
-Rebuild target 'Target 1'
-assembling STARTUP.A51...
-compiling common.c...
-compiling IIC.c...
-compiling oled.c...
-compiling MAX30100.c...
+Build target 'Target 1'
 compiling main.c...
-compiling Display.c...
-compiling Timer.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_DELAYUS?COMMON
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAYMS?COMMON
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IIC_START?IIC
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IIC_STOP?IIC
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_IIC_WR_BYTE?IIC
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?IIC_WAIT_ACK?IIC
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
@@ -73,15 +74,15 @@ linking...
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
     SYMBOL:  OBIIC_RECVDATA
     MODULE:  .\Objects\MAX30100.obj (MAX30100)
-    ADDRESS: 0C01H
+    ADDRESS: 0D74H
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
     SYMBOL:  OBIIC_RECVDATA
     MODULE:  .\Objects\MAX30100.obj (MAX30100)
-    ADDRESS: 0A8AH
-Program Size: data=56.4 xdata=13 code=4910
+    ADDRESS: 0C02H
+Program Size: data=50.4 xdata=13 code=5194
 creating hex file from ".\Objects\oledANDmax30100"...
-".\Objects\oledANDmax30100" - 0 Error(s), 19 Warning(s).
-Build Time Elapsed:  00:00:01
+".\Objects\oledANDmax30100" - 0 Error(s), 23 Warning(s).
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>
