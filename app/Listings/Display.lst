@@ -1,0 +1,158 @@
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN .\Objects\Display.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\sourses\Display.c OPTIMIZE(8,SPEED) BROWSE INCDIR
+                    -(..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\Display.lst) TABS(2) OBJECT(.\Objects\Disp
+                    -lay.obj)
+
+line level    source
+
+   1          #include "Display.h"
+   2          #include "bmp.h"
+   3          #include "Timer.h"
+   4          
+   5          void clearNum(unsigned char x,unsigned char y,unsigned int Length,unsigned int width)
+   6          {
+   7   1        unsigned int i,h;
+   8   1        for(i=0;i<Length;i++)
+   9   1        {
+  10   2          OLED_Set_Pos(x+i,y);
+  11   2          for(h=0;h<width;h++)
+  12   2          {
+  13   3            OLED_WR_Byte(0,OLED_DATA);
+  14   3          }
+  15   2          
+  16   2        }    
+  17   1      }
+  18          
+  19          void displayHoursH(unsigned char NUM)
+  20          {
+  21   1          unsigned char* pNUM=&TimerNUM[NUM][0];
+  22   1          clearNum(PosHoursH_X,PosHoursH_Y,TimerNUM_Length,TimerNUM_Width);
+  23   1          OLED_Draw(PosHoursH_X,PosHoursH_Y,TimerNUM_Length,TimerNUM_Width,pNUM);
+  24   1      
+  25   1      
+  26   1      }
+  27          void displayHoursL(unsigned char NUM)
+  28          {
+  29   1          unsigned char* pNUM=&TimerNUM[NUM][0];
+  30   1          clearNum(PosHoursL_X,PosHoursL_Y,TimerNUM_Length,TimerNUM_Width);
+  31   1          OLED_Draw(PosHoursL_X,PosHoursL_Y,TimerNUM_Length,TimerNUM_Width,pNUM);
+  32   1      
+  33   1      
+  34   1      }
+  35          
+  36          void displayMinuteH(unsigned char NUM)
+  37          {
+  38   1          unsigned char* pNUM=&TimerNUM[NUM][0];
+  39   1          clearNum(PosMinuteH_X,PosMinuteH_Y,TimerNUM_Length,TimerNUM_Width);
+  40   1          OLED_Draw(PosMinuteH_X,PosMinuteH_Y,TimerNUM_Length,TimerNUM_Width,pNUM);
+  41   1      
+  42   1      
+  43   1      }
+  44          
+  45          void displayMinuteL(unsigned char NUM)
+  46          {
+  47   1          unsigned char* pNUM=&TimerNUM[NUM][0];
+  48   1          clearNum(PosMinuteL_X,PosMinuteL_Y,TimerNUM_Length,TimerNUM_Width);
+  49   1          OLED_Draw(PosMinuteL_X,PosMinuteL_Y,TimerNUM_Length,TimerNUM_Width,pNUM);
+  50   1      
+  51   1      
+  52   1      }
+  53          
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 2   
+
+  54          // void displayColon()
+  55          // {
+  56          //     OLED_Draw(PosColon_X,PosColon_Y,4,2,Colon);
+  57          // }
+  58          
+  59          void displayColon(unsigned char cls)  //0x00清除 00xff显示
+  60          {
+  61   1          unsigned char i,h;
+  62   1          unsigned char* p;
+  63   1          p=Colon;
+  64   1        //OLED_Set_Pos(x,y);
+  65   1        for(i=0;i<4;i++)
+  66   1        {
+  67   2          OLED_Set_Pos(PosColon_X+i,PosColon_Y);
+  68   2          for(h=0;h<2;h++)
+  69   2          {
+  70   3            OLED_WR_Byte((*p)&cls,OLED_DATA);
+  71   3            p++;
+  72   3          }
+  73   2          
+  74   2        }
+  75   1      }
+  76          
+  77          
+  78          void displayIcon_Bluetooth(unsigned char cls)  //0x00清除 00xff显示
+  79          {
+  80   1          unsigned char i,h;
+  81   1          unsigned char* p;
+  82   1          p=iconBluetooth;
+  83   1        //OLED_Set_Pos(x,y);
+  84   1        for(i=0;i<17;i++)
+  85   1        {
+  86   2          OLED_Set_Pos(PosBluetooht_X+i,PosBluetooht_Y);
+  87   2          for(h=0;h<2;h++)
+  88   2          {
+  89   3            OLED_WR_Byte((*p)&cls,OLED_DATA);
+  90   3            p++;
+  91   3          }
+  92   2          
+  93   2        }
+  94   1      }
+  95          
+  96          void displayIcon_Battery(unsigned char state,unsigned char cls)  //0x00清除 00xff显示 state 0empty 1 2 3fu
+             -ll 4charging
+  97          {
+  98   1          unsigned char i,h;
+  99   1          unsigned char* p;
+ 100   1          p=&iconBattery[state][0];
+ 101   1        //OLED_Set_Pos(x,y);
+ 102   1        for(i=0;i<28;i++)
+ 103   1        {
+ 104   2          OLED_Set_Pos(PosBattery_X+i,PosBattery_Y);
+ 105   2          for(h=0;h<2;h++)
+ 106   2          {
+ 107   3            OLED_WR_Byte((*p)&cls,OLED_DATA);
+ 108   3            p++;
+ 109   3          }
+ 110   2          
+ 111   2        }
+ 112   1      }
+ 113          
+ 114          void DisplayOFF()
+C51 COMPILER V9.56.0.0   DISPLAY                                                           04/05/2018 22:00:27 PAGE 3   
+
+ 115          {
+ 116   1        OLED_WR_Byte(0xae,OLED_CMD);
+ 117   1      
+ 118   1      }
+ 119          
+ 120          void DisplayON()
+ 121          {
+ 122   1        OLED_WR_Byte(0xaf,OLED_CMD);
+ 123   1        displayHoursH(Hour/10);
+ 124   1        displayHoursL(Hour%10);
+ 125   1        displayMinuteH(Minute/10);
+ 126   1        displayMinuteH(Minute%10);
+ 127   1        
+ 128   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    636    ----
+   CONSTANT SIZE    =   1482    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      40
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

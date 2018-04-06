@@ -1,0 +1,10 @@
+".\Objects\STARTUP.obj",
+".\Objects\common.obj",
+".\Objects\IIC.obj",
+".\Objects\oled.obj",
+".\Objects\MAX30100.obj",
+".\Objects\main.obj",
+".\Objects\Display.obj",
+".\Objects\Timer.obj" 
+TO ".\Objects\oledANDmax30100" 
+PRINT(".\Listings\oledANDmax30100.m51") RAMSIZE(256) 

@@ -1,0 +1,58 @@
+C51 COMPILER V9.56.0.0   COMMON                                                            04/05/2018 22:00:26 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE COMMON
+OBJECT MODULE PLACED IN .\Objects\common.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\common.c OPTIMIZE(8,SPEED) BROWSE INCDIR(
+                    -..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\common.lst) TABS(2) OBJECT(.\Objects\common
+                    -.obj)
+
+line level    source
+
+   1          #include "common.h"
+   2          
+   3          void Delayus(unsigned int us )
+   4          {
+   5   1          unsigned int i;
+   6   1          for(i=MAIN_Fosc*us/12000;i>0;i--)
+   7   1          {
+   8   2              _nop_();
+   9   2          }
+  10   1      }
+  11          
+  12          
+  13          void Delay5us()
+  14          {
+  15   1          unsigned char i;
+  16   1      
+  17   1        _nop_();
+  18   1        _nop_();
+  19   1        i = 27;
+  20   1        while (--i);
+  21   1      }
+  22          void Delayms(unsigned int ms)
+  23          {
+  24   1        unsigned char i=100,j;
+  25   1        for(;ms;ms--)
+  26   1        {
+  27   2          while(--i)
+  28   2          {
+  29   3            j=10;
+  30   3            while(--j);
+  31   3          }
+  32   2        }
+  33   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     65    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

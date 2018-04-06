@@ -1,0 +1,121 @@
+C51 COMPILER V9.56.0.0   MAIN                                                              04/05/2018 22:00:27 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\Lib;..\Lib
+                    -\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include "common.h"
+   2          #include "oled.h"
+   3          #include "MAX30100.h"
+   4          #include "Display.h"
+   5          #include "Timer.h"
+   6          //#include "Power.h"
+   7          
+   8          unsigned char xdata Mode;
+   9          
+  10          enum FucState
+  11          {
+  12            TimeMode=1,
+  13            HeartRateMode,
+  14            StepMode
+  15          };
+  16          
+  17          void main()
+  18          {
+  19   1      
+  20   1        //char Temperature=0;
+  21   1        //char ID;
+  22   1      
+  23   1        //ID=MAX30100_getPartID();
+  24   1        //MAX30100_startTemperatureSampling();
+  25   1        OLED_Init();
+  26   1      //  powerInit();
+  27   1         displayHoursH(0);
+  28   1         displayHoursL(0);
+  29   1         displayColon(0xff);
+  30   1         displayMinuteH(0);
+  31   1         displayMinuteL(0);
+  32   1        displayIcon_Battery(4,0xff);
+  33   1        displayIcon_Bluetooth(0xff);
+  34   1        Timer0Init();
+  35   1        Mode=TimeMode;
+  36   1        while(1)
+  37   1        {
+  38   2          while(Mode==TimeMode)
+  39   2          {
+  40   3              
+  41   3          if(isSecondChange)
+  42   3          {
+  43   4            displayColon(0x00);
+  44   4          
+  45   4            isSecondChange=0;
+  46   4          }
+  47   3      
+  48   3          if(TickCount==25) displayColon(0xff);
+  49   3      
+  50   3          if(isMinuteChange)
+  51   3          {
+  52   4            displayMinuteL(Minute%10);
+  53   4            if((Minute/10)!=preMinuteH)
+  54   4            { 
+C51 COMPILER V9.56.0.0   MAIN                                                              04/05/2018 22:00:27 PAGE 2   
+
+  55   5              preMinuteH=Minute/10;
+  56   5              displayMinuteH(preMinuteH);
+  57   5              
+  58   5            }
+  59   4            isMinuteChange=0;
+  60   4      
+  61   4          }
+  62   3          if(isHourChange)
+  63   3          {
+  64   4            displayHoursL(Hour%10);
+  65   4            if((Hour/10)!=preHourH) 
+  66   4            {
+  67   5              preHourH=Hour/10;
+  68   5              displayHoursH(preHourH);
+  69   5            }
+  70   4            isHourChange=0;
+  71   4          }
+  72   3      
+  73   3      
+  74   3          
+  75   3        //  getBatteryState();
+  76   3        //  displayIcon_Battery(4,0xff);
+  77   3          
+  78   3        
+  79   3          }
+  80   2      
+  81   2          while(Mode==HeartRateMode)
+  82   2          {
+  83   3      
+  84   3          }
+  85   2          while(Mode==StepMode)
+  86   2          {
+  87   3      
+  88   3      
+  89   3          }
+  90   2      
+  91   2      
+  92   2        }
+  93   1      
+  94   1        
+  95   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    236    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

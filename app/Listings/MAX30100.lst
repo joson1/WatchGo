@@ -1,0 +1,110 @@
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/05/2018 22:00:27 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAX30100
+OBJECT MODULE PLACED IN .\Objects\MAX30100.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\MAX30100.c OPTIMIZE(8,SPEED) BROWSE INCDI
+                    -R(..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\MAX30100.lst) TABS(2) OBJECT(.\Objects\MA
+                    -X30100.obj)
+
+line level    source
+
+   1          #include "MAX30100.h"
+   2          
+   3          void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data)
+   4          {
+   5   1      
+   6   1          OBIIC_Start();
+   7   1          OBIIC_SendData(ADDRESS_MAX30100);
+   8   1          OBIIC_SendData(RAdd);
+   9   1          OBIIC_SendData(Data);
+  10   1          OBIIC_Stop();
+  11   1        
+  12   1      
+  13   1      }
+  14          char MAX30100_readRegister(unsigned char RAdd)
+  15          {
+  16   1          char Data;
+  17   1          OBIIC_Start();
+  18   1          OBIIC_SendData(ADDRESS_MAX30100);
+  19   1          OBIIC_SendData(RAdd);
+  20   1          OBIIC_Start();
+  21   1          OBIIC_SendData(ADDRESS_MAX30100+1);
+  22   1          Data=OBIIC_RecvData();
+  23   1          OBIIC_Stop();
+  24   1          return Data;
+  25   1      
+  26   1      }
+  27          
+  28          bit MAX30100_Init()
+  29          {
+  30   1          if(MAX30100_getPartID()!=0x11)
+  31   1          {
+  32   2              return 0;
+  33   2          }
+  34   1          return 1;
+  35   1      }
+  36          
+  37          
+  38          
+  39          
+  40          void MAX30100_restFifo()
+  41          {
+  42   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFIOEDPtr,0x00);
+  43   1          MAX30100_writeRegister( ADDRESS_MAX30100_FIFOWRPtr,0);
+  44   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFOData,0);
+  45   1      }
+  46          
+  47          unsigned char MAX30100_getPartID()
+  48          {
+  49   1          return MAX30100_readRegister(0xff);
+  50   1      }
+  51          void MAX30100_startTemperatureSampling()
+  52          {
+  53   1          MAX30100_writeRegister(ADDRESS_MAX30100_MODECFG,0x08);
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/05/2018 22:00:27 PAGE 2   
+
+  54   1      }
+  55          float MAX30100_getTemperature()
+  56          {
+  57   1          unsigned char integer=MAX30100_readRegister(ADDRESS_MAX30100_TEMP);
+  58   1          float frac=MAX30100_readRegister(ADDRESS_MAX30100_TEMP+1);
+  59   1          return frac*0.0625+integer;
+  60   1      }
+  61          
+  62          void MAX30100_readMultiByte(unsigned char address,unsigned char* buffer,unsigned char length)
+  63          {
+  64   1          unsigned char* p=buffer;
+  65   1          OBIIC_Start();
+  66   1          OBIIC_SendData(ADDRESS_MAX30100);
+  67   1          OBIIC_SendData(address);
+  68   1          OBIIC_Start();
+  69   1          OBIIC_SendData(ADDRESS_MAX30100+1);
+  70   1          length--;
+  71   1          *p=OBIIC_RecvData();
+  72   1          p++;
+  73   1          while(length--)
+  74   1          {
+  75   2              OBIIC_SendACK();
+  76   2              *p=OBIIC_RecvData();
+  77   2              p++;
+  78   2          }
+  79   1          OBIIC_SendNAK();
+  80   1          OBIIC_Stop();
+  81   1      
+  82   1      
+  83   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    602    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      13
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
