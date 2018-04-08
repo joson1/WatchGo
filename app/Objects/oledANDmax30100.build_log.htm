@@ -22,11 +22,20 @@ Dialog DLL:      TP51.DLL V2.59.0.0
  
 <h2>Project:</h2>
 E:\OLEDTEST\app\oledANDmax30100.uvproj
-Project File Date:  02/01/2018
+Project File Date:  04/07/2018
 
 <h2>Output:</h2>
-Build target 'Target 1'
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling common.c...
+compiling IIC.c...
+compiling oled.c...
+compiling MAX30100.c...
+compiling ONboardIIC.c...
+compiling Uart.c...
 compiling main.c...
+compiling Display.c...
+compiling Timer.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_DELAYUS?COMMON
@@ -63,26 +72,19 @@ linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_MAX30100_READMULTIBYTE?MAX30100
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?MAX30100_ENSPO2?MAX30100
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?DISPLAYOFF?DISPLAY
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?DISPLAYON?DISPLAY
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER0INIT?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?TIMER1INIT?TIMER
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  OBIIC_RECVDATA
-    MODULE:  .\Objects\MAX30100.obj (MAX30100)
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  OBIIC_RECVDATA
-    MODULE:  .\Objects\MAX30100.obj (MAX30100)
-    ADDRESS: 0D74H
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  OBIIC_RECVDATA
-    MODULE:  .\Objects\MAX30100.obj (MAX30100)
-    ADDRESS: 0C02H
-Program Size: data=50.4 xdata=13 code=5194
+Program Size: data=50.5 xdata=31 code=5530
 creating hex file from ".\Objects\oledANDmax30100"...
-".\Objects\oledANDmax30100" - 0 Error(s), 23 Warning(s).
-Build Time Elapsed:  00:00:04
+".\Objects\oledANDmax30100" - 0 Error(s), 22 Warning(s).
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

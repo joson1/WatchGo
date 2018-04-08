@@ -1,11 +1,11 @@
-C51 COMPILER V9.56.0.0   COMMON                                                            04/06/2018 12:37:06 PAGE 1   
+C51 COMPILER V9.56.0.0   COMMON                                                            04/08/2018 17:34:36 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE COMMON
-OBJECT MODULE PLACED IN .\Objects\common.obj
+OBJECT MODULE PLACED IN \\192.168.2.201\Users\zhongzuan\common.obj
 COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\common.c OPTIMIZE(8,SPEED) BROWSE INCDIR(
-                    -..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\common.lst) TABS(2) OBJECT(.\Objects\common
-                    -.obj)
+                    -..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\common.lst) TABS(2) OBJECT(\\192.168.2.201\
+                    -Users\zhongzuan\common.obj)
 
 line level    source
 

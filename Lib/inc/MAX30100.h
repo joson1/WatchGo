@@ -28,4 +28,6 @@ extern float MAX30100_getTemperature();
 extern void MAX30100_startTemperatureSampling();
 extern unsigned char MAX30100_getPartID();
 extern void MAX30100_restFifo();
+extern void MAX30100_enSPO2();
+
 #endif

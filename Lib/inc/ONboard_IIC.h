@@ -4,8 +4,8 @@
 #include "STC8.h"
 #include "intrins.h"
 
-#define obSDA =P14;
-#define obSCL =P15;
+#define obSDA =P33;
+#define obSCL =P32;
 
 #define OBIIC_Wait() while(!(I2CMSST&0x40));\
                     I2CMSST &= ~0x40

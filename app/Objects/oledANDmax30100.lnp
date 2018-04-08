@@ -3,6 +3,8 @@
 ".\Objects\IIC.obj",
 ".\Objects\oled.obj",
 ".\Objects\MAX30100.obj",
+".\Objects\ONboardIIC.obj",
+".\Objects\Uart.obj",
 ".\Objects\main.obj",
 ".\Objects\Display.obj",
 ".\Objects\Timer.obj" 

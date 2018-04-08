@@ -1,23 +1,6 @@
 #include "oled.h"
 
 
-
-
-void delay()
-{
-    int i;
-    for(i=0;i<3000;i++)
-    {
-        _nop_();
-        _nop_();
-        _nop_();
-        _nop_(); 
-    }
-
-}
-
-
-
 void OLED_WR_Byte(unsigned char Data,bit CD) 
 {
     if(CD)

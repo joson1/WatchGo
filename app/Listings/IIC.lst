@@ -1,10 +1,11 @@
-C51 COMPILER V9.56.0.0   IIC                                                               04/06/2018 12:37:06 PAGE 1   
+C51 COMPILER V9.56.0.0   IIC                                                               04/08/2018 17:34:37 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE IIC
-OBJECT MODULE PLACED IN .\Objects\IIC.obj
+OBJECT MODULE PLACED IN \\192.168.2.201\Users\zhongzuan\IIC.obj
 COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\IIC.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\
-                    -Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\IIC.lst) TABS(2) OBJECT(.\Objects\IIC.obj)
+                    -Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\IIC.lst) TABS(2) OBJECT(\\192.168.2.201\Users\
+                    -zhongzuan\IIC.obj)
 
 line level    source
 
@@ -61,9 +62,9 @@ line level    source
   51   2          }
   52   1      }
   53          void IIC_Nack()
-  54          {
-C51 COMPILER V9.56.0.0   IIC                                                               04/06/2018 12:37:06 PAGE 2   
+C51 COMPILER V9.56.0.0   IIC                                                               04/08/2018 17:34:37 PAGE 2   
 
+  54          {
   55   1          SCL=0;
   56   1          SDA=1;
   57   1          SCL=1;
@@ -125,9 +126,9 @@ line level    source
  113   2              retc=retc<<1;
  114   2              if(SDA==1)
  115   2              retc=retc+1;
- 116   2              _nop_();
-C51 COMPILER V9.56.0.0   IIC                                                               04/06/2018 12:37:06 PAGE 3   
+C51 COMPILER V9.56.0.0   IIC                                                               04/08/2018 17:34:37 PAGE 3   
 
+ 116   2              _nop_();
  117   2              _nop_();
  118   2          }
  119   1          //¸ø³öACKÐÅºÅ

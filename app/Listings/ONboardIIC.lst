@@ -1,22 +1,48 @@
-C51 COMPILER V9.56.0.0   ONBOARDIIC                                                        01/28/2018 15:31:47 PAGE 1   
+C51 COMPILER V9.56.0.0   ONBOARDIIC                                                        04/08/2018 17:34:37 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE ONBOARDIIC
-OBJECT MODULE PLACED IN .\Objects\ONboardIIC.obj
+OBJECT MODULE PLACED IN \\192.168.2.201\Users\zhongzuan\ONboardIIC.obj
 COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\ONboardIIC.c OPTIMIZE(8,SPEED) BROWSE INC
-                    -DIR(..\Lib;..\Lib\inc;..\Lib\src) DEBUG OBJECTEXTEND PRINT(.\Listings\ONboardIIC.lst) TABS(2) OBJECT(.\Objects\ONboardII
-                    -C.obj)
+                    -DIR(..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\ONboardIIC.lst) TABS(2) OBJECT(\\192.16
+                    -8.2.201\Users\zhongzuan\ONboardIIC.obj)
 
 line level    source
 
    1          #include "ONboard_IIC.h"
    2          
-   3          char OBIIC_RecvData()
-   4          {
-   5   1          I2CMSCR = 0x04;                             //∑¢ÀÕRECV√¸¡Ó
-*** ERROR C202 IN LINE 5 OF ..\Lib\src\ONboardIIC.c: 'I2CMSCR': undefined identifier
-   6   1          Wait();
-   7   1          return I2CRXD;
-   8   1      }
+   3          
+   4          char OBIIC_RecvData()
+   5          {
+   6   1          I2CMSCR = 0x04;                             //∑¢ÀÕRECV√¸¡Ó
+   7   1          OBIIC_Wait();
+   8   1          return I2CRXD;
+   9   1      }
+  10          
+  11          
+  12          void delay()
+  13          {
+  14   1          int i;
+  15   1          for(i=0;i<3000;i++)
+  16   1          {
+  17   2              _nop_();
+  18   2              _nop_();
+  19   2              _nop_();
+  20   2              _nop_(); 
+  21   2          }
+  22   1      
+  23   1      }
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     45    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

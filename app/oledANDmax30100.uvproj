@@ -44,7 +44,7 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\Objects\</OutputDirectory>
+          <OutputDirectory>\\192.168.2.201\Users\zhongzuan\</OutputDirectory>
           <OutputName>oledANDmax30100</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
@@ -407,6 +407,16 @@
               <FileName>MAX30100.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Lib\inc\MAX30100.h</FilePath>
+            </File>
+            <File>
+              <FileName>ONboardIIC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\src\ONboardIIC.c</FilePath>
+            </File>
+            <File>
+              <FileName>Uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Lib\src\Uart.c</FilePath>
             </File>
           </Files>
         </Group>
