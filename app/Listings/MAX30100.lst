@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/08/2018 17:34:37 PAGE 1   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAX30100
@@ -11,114 +11,259 @@ line level    source
 
    1          #include "MAX30100.h"
    2          
-   3          void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data)
-   4          {
-   5   1      
-   6   1          OBIIC_Start();
-   7   1          OBIIC_SendData(ADDRESS_MAX30100);
-   8   1          OBIIC_SendACK();
-   9   1          OBIIC_SendData(RAdd);
-  10   1          OBIIC_SendACK();
-  11   1          OBIIC_SendData(Data);
-  12   1          OBIIC_SendACK();
-  13   1          OBIIC_Stop();
-  14   1        
-  15   1      
-  16   1      }
-  17          char MAX30100_readRegister(unsigned char RAdd)
-  18          {
-  19   1          char Data;
-  20   1          OBIIC_Start();
-  21   1          OBIIC_SendData(ADDRESS_MAX30100);
-  22   1          OBIIC_SendACK();
-  23   1          OBIIC_SendData(RAdd);
-  24   1          OBIIC_SendACK();
-  25   1          OBIIC_Start();
-  26   1          OBIIC_SendData(ADDRESS_MAX30100+1);
+   3          SensorReadout xdata readoutBuffer[16];
+   4          SensorReadout xdata *head;
+   5          SensorReadout xdata *tail;
+   6          unsigned short MAX30100_count;
+   7          
+   8          void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data)
+   9          {
+  10   1      
+  11   1          OBIIC_Start();
+  12   1          OBIIC_SendData(ADDRESS_MAX30100);
+  13   1          OBIIC_SendACK();
+  14   1          OBIIC_SendData(RAdd);
+  15   1          OBIIC_SendACK();
+  16   1          OBIIC_SendData(Data);
+  17   1          OBIIC_SendACK();
+  18   1          OBIIC_Stop();
+  19   1      }
+  20          char MAX30100_readRegister(unsigned char RAdd)
+  21          {
+  22   1          char Data;
+  23   1          OBIIC_Start();
+  24   1          OBIIC_SendData(ADDRESS_MAX30100);
+  25   1          OBIIC_SendACK();
+  26   1          OBIIC_SendData(RAdd);
   27   1          OBIIC_SendACK();
-  28   1          Data=OBIIC_RecvData();
-  29   1          OBIIC_SendNAK();
-  30   1          OBIIC_Stop();
-  31   1          return Data;
-  32   1      
-  33   1      }
-  34          
-  35          bit MAX30100_Init()
-  36          {
-  37   1          if(MAX30100_getPartID()!=0x11)
-  38   1          {
-  39   2              return 0;
-  40   2          }
-  41   1          return 1;
-  42   1      }
-  43          
+  28   1          OBIIC_Start();
+  29   1          OBIIC_SendData(ADDRESS_MAX30100+1);
+  30   1          OBIIC_SendACK();
+  31   1          Data=OBIIC_RecvData();
+  32   1          OBIIC_SendNAK();
+  33   1          OBIIC_Stop();
+  34   1          return Data;
+  35   1      }
+  36          
+  37          
+  38          void MAX30100_restFifo()
+  39          {
+  40   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFIOEDPtr,0);
+  41   1          MAX30100_writeRegister( ADDRESS_MAX30100_FIFOWRPtr,0);
+  42   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFOData,0);
+  43   1      }
   44          
-  45          void MAX30100_restFifo()
+  45          unsigned char MAX30100_getPartID()
   46          {
-  47   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFIOEDPtr,0x00);
-  48   1          MAX30100_writeRegister( ADDRESS_MAX30100_FIFOWRPtr,0);
-  49   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFOData,0);
-  50   1      }
-  51          
-  52          unsigned char MAX30100_getPartID()
-  53          {
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/08/2018 17:34:37 PAGE 2   
+  47   1          return MAX30100_readRegister(0xff);
+  48   1      }
+  49          
+  50          
+  51          void MAX30100_startTemperatureSampling()
+  52          {
+  53   1          unsigned char modeConfig=MAX30100_readRegister(MAX30100_REG_MODE_CONFIGURATION);
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 2   
 
-  54   1          return MAX30100_readRegister(0xff);
-  55   1      }
-  56          
-  57          
-  58          void MAX30100_startTemperatureSampling()
-  59          {
-  60   1          MAX30100_writeRegister(ADDRESS_MAX30100_MODECFG,0x08);
-  61   1      }
-  62          
-  63          float MAX30100_getTemperature()
-  64          {
-  65   1          unsigned char integer=MAX30100_readRegister(ADDRESS_MAX30100_TEMP);
-  66   1          float frac=MAX30100_readRegister(ADDRESS_MAX30100_TEMP+1);
-  67   1          return frac*0.0625+integer;
-  68   1      }
-  69          
-  70          
-  71          void MAX30100_readMultiByte(unsigned char address,unsigned char* buffer,unsigned char length)
-  72          {
-  73   1          unsigned char* p=buffer;
-  74   1          OBIIC_Start();
-  75   1          OBIIC_SendData(ADDRESS_MAX30100);
-  76   1          OBIIC_SendACK();
-  77   1          OBIIC_SendData(address);
+  54   1          modeConfig |= MAX30100_MC_TEMP_EN;
+  55   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,modeConfig);
+  56   1      
+  57   1      }
+  58          
+  59          char MAX30100_isTempertuareReady()
+  60          {
+  61   1          return !(MAX30100_readRegister(MAX30100_REG_MODE_CONFIGURATION)&MAX30100_MC_TEMP_EN);
+  62   1      }
+  63          
+  64          ////////////////////////
+  65          float MAX30100_retrieveTemperature()
+  66          {
+  67   1          unsigned char integer=MAX30100_readRegister(ADDRESS_MAX30100_TEMP);
+  68   1          float frac=MAX30100_readRegister(ADDRESS_MAX30100_TEMP+1);
+  69   1          return frac*0.0625+integer;
+  70   1      }
+  71          /////////////////////////
+  72          
+  73          void MAX30100_readMultiByte(unsigned char address,unsigned char* MAX30100_buffer,unsigned char length)
+  74          {
+  75   1          unsigned char* p=MAX30100_buffer;
+  76   1          OBIIC_Start();
+  77   1          OBIIC_SendData(ADDRESS_MAX30100);
   78   1          OBIIC_SendACK();
-  79   1          OBIIC_Start();
-  80   1          OBIIC_SendData(ADDRESS_MAX30100+1);
-  81   1          OBIIC_SendACK();
-  82   1          length--;
-  83   1          *p=OBIIC_RecvData();
-  84   1          p++;
-  85   1          while(length--)
-  86   1          {
-  87   2              OBIIC_SendACK();
-  88   2              *p=OBIIC_RecvData();
-  89   2              p++;
-  90   2          }
-  91   1          OBIIC_SendNAK();
-  92   1          OBIIC_Stop();
-  93   1      
-  94   1      
-  95   1      }
-  96          
-  97          void MAX30100_enSPO2()
-  98          {
-  99   1          MAX30100_writeRegister(ADDRESS_MAX30100_SPO2CFG,0x5f);
- 100   1      }
+  79   1          OBIIC_SendData(address);
+  80   1          OBIIC_SendACK();
+  81   1          OBIIC_Start();
+  82   1          OBIIC_SendData(ADDRESS_MAX30100+1);
+  83   1          OBIIC_SendACK();
+  84   1          length--;
+  85   1          *p=OBIIC_RecvData();
+  86   1          p++;
+  87   1          while(length--)
+  88   1          {
+  89   2              OBIIC_SendACK();
+  90   2              *p=OBIIC_RecvData();
+  91   2              p++;
+  92   2          }
+  93   1          OBIIC_SendNAK();
+  94   1          OBIIC_Stop();
+  95   1      
+  96   1      
+  97   1      }
+  98          
+  99          
+ 100          char MAX30100_Init()
+ 101          {
+ 102   1          if(MAX30100_getPartID != 0x11)
+ 103   1          {return 0;}
+ 104   1      
+ 105   1          MAX30100_setMode(MAX30100_DEFAULT_MODE);
+ 106   1          MAX30100_setLedsPulseWidth(MAX30100_DEFAULT_PULSE_WIDTH);
+ 107   1          MAX30100_setSamplingRate(MAX30100_DEFAULT_SAMPLING_RATE);
+ 108   1          MAX30100_setLedsCurrent(MAX30100_DEFAULT_IR_LED_CURRENT,MAX30100_DEFAULT_RED_LED_CURRENT);
+ 109   1          MAX30100_setHighresModeEnabled(1);
+ 110   1      
+ 111   1          return 1;
+ 112   1      
+ 113   1      }
+ 114          
+ 115          
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 3   
+
+ 116          void MAX30100_setMode(Mode mode)
+ 117          {
+ 118   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,mode);
+ 119   1      }
+ 120          
+ 121          void MAX30100_setLedsPulseWidth(LEDPulseWidth ledPulseWidth)
+ 122          {
+ 123   1          unsigned char previous = MAX30100_readRegister(MAX30100_REG_SPO2_CONFIGURATION);
+ 124   1          MAX30100_writeRegister(MAX30100_REG_SPO2_CONFIGURATION, (previous & 0xfc) | ledPulseWidth);
+ 125   1      }
+ 126          
+ 127          void MAX30100_setSamplingRate(SamplingRate samplingRate)
+ 128          {
+ 129   1          unsigned char previous = MAX30100_readRegister(MAX30100_REG_SPO2_CONFIGURATION);
+ 130   1          MAX30100_writeRegister(MAX30100_REG_SPO2_CONFIGURATION, (previous & 0xe3) | (samplingRate << 2));
+ 131   1      }
+ 132          
+ 133          void MAX30100_setLedsCurrent(LEDCurrent irLedCurrent, LEDCurrent redLedCurrent)
+ 134          {
+ 135   1          MAX30100_writeRegister(MAX30100_REG_LED_CONFIGURATION, redLedCurrent << 4 | irLedCurrent);
+ 136   1      }
+ 137          
+ 138          void MAX30100_setHighresModeEnabled(char enabled)
+ 139          {
+ 140   1          unsigned char previous = MAX30100_readRegister(MAX30100_REG_SPO2_CONFIGURATION);
+ 141   1          if (enabled) {
+ 142   2              MAX30100_writeRegister(MAX30100_REG_SPO2_CONFIGURATION, previous | MAX30100_SPC_SPO2_HI_RES_EN);
+ 143   2          } else {
+ 144   2              MAX30100_writeRegister(MAX30100_REG_SPO2_CONFIGURATION, previous & ~MAX30100_SPC_SPO2_HI_RES_EN);
+ 145   2          }
+ 146   1      
+ 147   1      
+ 148   1      }
+ 149          
+ 150          void MAX30100_update()
+ 151          {
+ 152   1          readFifoData();
+ 153   1      }
+ 154          
+ 155          char MAX30100_getRawValues(unsigned short *ir, unsigned short *red)
+ 156          {
+ 157   1          if(MAX30100_count!=0)
+ 158   1          {
+ 159   2              SensorReadout readout;
+ 160   2              readout=MAX30100_Buffer_pop();
+ 161   2      
+ 162   2              *ir=readout.ir;
+ 163   2              *red=readout.red;
+ 164   2      
+ 165   2              return 1;
+ 166   2          } else 
+ 167   1          {
+ 168   2              return 0;
+ 169   2          }
+ 170   1      }
+ 171          ///////////////////////
+ 172          char MAX30100_Buffer_Push(SensorReadout value)
+ 173          {
+ 174   1          if(++tail == readoutBuffer+16)
+ 175   1          {
+ 176   2              tail=readoutBuffer;
+ 177   2          }
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 4   
+
+ 178   1          *tail = value;
+ 179   1          if(MAX30100_count == 16)
+ 180   1          {
+ 181   2              if(++head == readoutBuffer+16){ head=readoutBuffer; }
+ 182   2              return 0;
+ 183   2          } else{
+ 184   2              if(MAX30100_count++==0) head=tail;
+ 185   2              return 1;
+ 186   2          }
+ 187   1      
+ 188   1      }
+ 189          //////////////////////
+ 190          SensorReadout MAX30100_Buffer_pop()
+ 191          {
+ 192   1          //if(MAX30100_count<0)  ;    ////ERROR crash
+ 193   1          SensorReadout result;
+ 194   1          result = *tail--;
+ 195   1          if(tail<readoutBuffer) { tail=readoutBuffer + 15; }
+ 196   1          MAX30100_count--;
+ 197   1          return result;
+ 198   1          
+ 199   1      }
+ 200          ///////////////////////
+ 201          
+ 202          void readFifoData()
+ 203          {
+ 204   1          unsigned char xdata MAX30100_buffer[MAX30100_FIFO_DEPTH*4]; //MAX30100_FIFO_DEPTH*4
+ 205   1          unsigned char xdata toRead;
+ 206   1          unsigned char i;
+ 207   1      
+ 208   1          toRead = (MAX30100_readRegister(MAX30100_REG_FIFO_WRITE_POINTER) - MAX30100_readRegister(MAX30100_REG_
+             -FIFO_READ_POINTER)) & (MAX30100_FIFO_DEPTH-1);
+ 209   1      
+ 210   1          if (toRead) {
+ 211   2              MAX30100_readMultiByte(MAX30100_REG_FIFO_DATA, MAX30100_buffer, 4 * toRead);
+ 212   2      
+ 213   2              for (i=0 ; i < toRead ; ++i) {
+ 214   3                  // Warning: the values are always left-aligned
+ 215   3                  SensorReadout SRtemp;
+ 216   3                  SRtemp.ir=(unsigned short)((MAX30100_buffer[i*4] << 8) | MAX30100_buffer[i*4 + 1]);
+ 217   3                  SRtemp.red=(unsigned short)((MAX30100_buffer[i*4 + 2] << 8) | MAX30100_buffer[i*4 + 3]);
+ 218   3                  MAX30100_Buffer_Push(SRtemp);
+ 219   3              }
+ 220   2          }
+ 221   1      }
+ 222          
+ 223          
+ 224          
+ 225          
+ 226          void shutdown()
+ 227          {
+ 228   1          unsigned char modeConfig=MAX30100_readRegister(MAX30100_REG_MODE_CONFIGURATION);
+ 229   1          modeConfig |= MAX30100_MC_SHDN;
+ 230   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,modeConfig);
+ 231   1      
+ 232   1      }
+ 233          void resume()
+ 234          {
+ 235   1          unsigned char modeConfig=MAX30100_readRegister(MAX30100_REG_MODE_CONFIGURATION);
+ 236   1          modeConfig &= ~MAX30100_MC_SHDN;
+ 237   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,modeConfig);
+ 238   1      }
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 5   
+
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    833    ----
+   CODE SIZE        =   1401    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =     64      65
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      13
+   DATA SIZE        =      6      39
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

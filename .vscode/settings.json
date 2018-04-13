@@ -1,9 +1,10 @@
 {
     "C_Cpp.errorSquiggles": "Disabled",
-    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "files.associations": {
         "oled.h": "c",
         "iic.h": "c",
-        "onboard_iic.h": "c"
+        "onboard_iic.h": "c",
+        "common.h": "c"
     }
 }

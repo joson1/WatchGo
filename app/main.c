@@ -1,12 +1,13 @@
 #include "common.h"
 #include "oled.h"
-#include "MAX30100.h"
+
 #include "Display.h"
 #include "Timer.h"
 #include "Uart.h"
+#include "MAX30100.h"
 //#include "Power.h"
 
-unsigned char xdata Mode;
+
 
 enum FucState
 {
@@ -17,10 +18,7 @@ enum FucState
 
 void main()
 {
-
-	
-
-
+	unsigned char xdata Mode;
 	unsigned char ID=0 ;
 	
 	P_SW2=0xb0;
@@ -44,12 +42,10 @@ void main()
 	OLED_Init();
 
 	displayHoursH(0);
-	displayHoursL(0);
 	displayColon(0xff);
 	displayMinuteH(0);
-	displayMinuteL(0);
-	displayIcon_Battery(4,0xff);
-	displayIcon_Bluetooth(0xff);
+	displayIcon_Battery(2,0xff);
+	displayIcon_Bluetooth(0x00);
 
 	Uart2SendStr("Started!\n");
 	

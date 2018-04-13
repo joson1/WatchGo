@@ -54,7 +54,9 @@
                 "${workspaceRoot}",
                 "${workspaceRoot}/Lib/inc",
                 "${workspaceRoot}/Lib",
-                "${workspaceRoot}/sourses"
+                "${workspaceRoot}/sourses",
+                "D:/Program Files (x86)/Keil_v5/C51/INC"
+
             ],
             "defines": [
                 "_DEBUG",
