@@ -7,7 +7,7 @@
 #include "MAX30100.h"
 //#include "Power.h"
 
-
+unsigned char xdata SMode=0;
 
 enum FucState
 {
@@ -18,9 +18,9 @@ enum FucState
 
 void main()
 {
-	unsigned char xdata Mode;
-	unsigned char ID=0 ;
 	
+	unsigned char ID=0 ;
+
 	P_SW2=0xb0;
 	I2CCFG=0xe0;
 	I2CMSST=0x00;
@@ -30,7 +30,7 @@ void main()
 	//	powerInit();
 
 	Timer0Init();
-	Mode=TimeMode;
+	SMode=TimeMode;
 
 	MAX30100_writeRegister(0x06,0x0b);
 	MAX30100_writeRegister(0x01,0xf0);
@@ -47,7 +47,7 @@ void main()
 	displayIcon_Battery(2,0xff);
 	displayIcon_Bluetooth(0x00);
 
-	Uart2SendStr("Started!\n");
+	Uart2_SendStr("Started!\n");
 	
 
 
@@ -56,7 +56,7 @@ void main()
 	{
 
 
-		while(Mode==TimeMode)
+		while(SMode==TimeMode)
 		{
 
 				
@@ -100,11 +100,35 @@ void main()
 	
 		}
 
-		while(Mode==HeartRateMode)
+		while(SMode==HeartRateMode)
 		{
+			displayHRmodeIcon();
+			if (Rptr != Wptr)
+			{
+				
+				// ID=MAX30100_getPartID();
+				// Uart2SendChar(buffer[Rptr++]);
+				// Uart2SendChar(ID);
+				switch(buffer[Rptr-1])
+				{
+					case 1 :  Uart2SendChar( MAX30100_Init() );break;
+					case 2 :  Uart2SendChar( MAX30100_getPartID() );break;
+					case 3 :  MAX30100_startTemperatureSampling();Uart2_SendStr("wait a moment then get temperature\n");break;
+					case 4 :  Uart2_SendStr("integer"); Uart2SendChar(MAX30100_readRegister(ADDRESS_MAX30100_TEMP)); Uart2_SendStr("\n");break;
+					case 6 :  shutdown(); break;
+					case 7 :  resume(); break;
+					default : break;
+				}
+				
+				
+				Rptr &= 0x0f;
 
+			}
+		
+
+			
 		}
-		while(Mode==StepMode)
+		while(SMode==StepMode)
 		{
 
 
@@ -113,5 +137,5 @@ void main()
 
 	}
 
-	
+
 }

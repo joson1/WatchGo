@@ -61,7 +61,7 @@ void displayColon(unsigned char cls)  //0x00Çå³ı 00xffÏÔÊ¾
   	unsigned char i,h;
 		unsigned char* p;
 		p=Colon;
-	//OLED_Set_Pos(x,y);
+
 	for(i=0;i<4;i++)
 	{
 		OLED_Set_Pos(PosColon_X+i,PosColon_Y);
@@ -111,6 +111,16 @@ void displayIcon_Battery(unsigned char state,unsigned char cls)  //0x00Çå³ı 00xf
 	}
 }
 
+void displayHRmodeIcon()
+{
+	unsigned char* pHRmodeIcon=&HRmodeIcon[0];
+
+	OLED_Clear();
+
+	OLED_Draw(0,0,128,4,pHRmodeIcon);
+
+}
+
 void DisplayOFF()
 {
 	OLED_WR_Byte(0xae,OLED_CMD);
@@ -126,3 +136,5 @@ void DisplayON()
 	displayMinuteH(Minute%10);
 	
 }
+
+

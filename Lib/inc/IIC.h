@@ -1,7 +1,8 @@
 #ifndef IIC_H
 #define IIC_H
 
-#include "common.h"
+
+#include "STC8.h"
 
 #define SDA P24
 #define SCL P25

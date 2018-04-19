@@ -14,4 +14,5 @@ extern unsigned int xdata preMinuteH;
 
 
 extern void Timer0Init(void);
+extern void Timer1Init(void);
 #endif

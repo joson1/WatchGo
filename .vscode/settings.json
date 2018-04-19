@@ -5,6 +5,8 @@
         "oled.h": "c",
         "iic.h": "c",
         "onboard_iic.h": "c",
-        "common.h": "c"
+        "common.h": "c",
+        "uart.h": "c",
+        "timer.h": "c"
     }
 }

@@ -1,10 +1,10 @@
 #include "Uart.h"
+#include "common.h"
 
-
- bit busy=0;
- xdata char buffer[16] = 0;
- xdata char Wptr=0;
- xdata char Rptr=0;
+bit busy=0;
+char xdata buffer[16] = 0;
+char xdata Wptr=0;
+char xdata Rptr=0;
 
 
 void Uart2Isr() interrupt 8
@@ -14,25 +14,22 @@ void Uart2Isr() interrupt 8
         S2CON &= ~0x02;
         busy=0;
     }
-    if(S2CON & 0x01)
+    if(S2CON & 0x01)    //接收中断
     {
         S2CON &= 0xfe;
         buffer[Wptr++]=S2BUF;
         Wptr &= 0x0f;
-        
-        
-        ////串口命令
-
-        // if (Rptr != Wptr)
-        // {
-
-        //     ID=MAX30100_getPartID();
-        //     Uart2SendChar(buffer[Rptr++]);
-        //     Uart2SendChar(ID);
+    
+        switch (buffer[Wptr-1])
+        {
             
-        //     Rptr &= 0x0f;
-        // }
-        ///////
+            case'T' : SMode=1; break;
+            case'H' : SMode=2; break;
+            default : break;
+
+        }
+        
+
 	
     }
 }
@@ -57,7 +54,7 @@ void Uart2SendChar(char Sdata)
     S2BUF=Sdata;
 }
 
-void Uart2SendStr(char* p)
+void Uart2_SendStr(char* p)
 {
     while(*p)
     {

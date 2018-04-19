@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   IIC                                                               04/13/2018 18:15:52 PAGE 1   
+C51 COMPILER V9.56.0.0   IIC                                                               04/19/2018 22:17:11 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE IIC
@@ -10,144 +10,145 @@ COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\I
 line level    source
 
    1          #include "IIC.h"
-   2          
-   3          void IIC_Start()
-   4          {
-   5   1          SCL=1;
-   6   1          SDA=1;
-   7   1          SDA=0;
-   8   1          SCL=0;
-   9   1      }
-  10          void IIC_Stop()
-  11          {
-  12   1          SCL=1;
-  13   1          SDA=0;
-  14   1          SDA=1;
-  15   1      }
-  16          
-  17          void IIC_WR_Byte(unsigned char IIC_Byte)
-  18          {
-  19   1          unsigned char a=0;
-  20   1          for(a=0;a<8;a++)
-  21   1          {
-  22   2              SDA=IIC_Byte>>7;
-  23   2              IIC_Byte=IIC_Byte<<1;
-  24   2              Delay5us();
-  25   2              SCL=1;
-  26   2              Delay5us();
-  27   2              SCL=0;
-  28   2              Delay5us();
-  29   2          }
-  30   1          SDA=1;
-  31   1          SCL=1;
-  32   1      
-  33   1      }
-  34          //void IIC_Wait_Ack()
-  35          //{
-  36              
-  37          //    SCL=1;
-  38          //    SCL=0;
-  39          //}
-  40          void IIC_Wait_Ack()
-  41          {
-  42   1          unsigned char b;
-  43   1          while(SDA)
-  44   1          {
-  45   2              b++;
-  46   2              if(b>30)
-  47   2              {
-  48   3                  SCL=0;
-  49   3              
-  50   3              }
-  51   2          }
-  52   1      }
-  53          void IIC_Nack()
-C51 COMPILER V9.56.0.0   IIC                                                               04/13/2018 18:15:52 PAGE 2   
+   2          #include "common.h"
+   3          
+   4          void IIC_Start()
+   5          {
+   6   1          SCL=1;
+   7   1          SDA=1;
+   8   1          SDA=0;
+   9   1          SCL=0;
+  10   1      }
+  11          void IIC_Stop()
+  12          {
+  13   1          SCL=1;
+  14   1          SDA=0;
+  15   1          SDA=1;
+  16   1      }
+  17          
+  18          void IIC_WR_Byte(unsigned char IIC_Byte)
+  19          {
+  20   1          unsigned char a=0;
+  21   1          for(a=0;a<8;a++)
+  22   1          {
+  23   2              SDA=IIC_Byte>>7;
+  24   2              IIC_Byte=IIC_Byte<<1;
+  25   2              Delay5us();
+  26   2              SCL=1;
+  27   2              Delay5us();
+  28   2              SCL=0;
+  29   2              Delay5us();
+  30   2          }
+  31   1          SDA=1;
+  32   1          SCL=1;
+  33   1      
+  34   1      }
+  35          //void IIC_Wait_Ack()
+  36          //{
+  37              
+  38          //    SCL=1;
+  39          //    SCL=0;
+  40          //}
+  41          void IIC_Wait_Ack()
+  42          {
+  43   1          unsigned char b;
+  44   1          while(SDA)
+  45   1          {
+  46   2              b++;
+  47   2              if(b>30)
+  48   2              {
+  49   3                  SCL=0;
+  50   3              
+  51   3              }
+  52   2          }
+  53   1      }
+C51 COMPILER V9.56.0.0   IIC                                                               04/19/2018 22:17:11 PAGE 2   
 
-  54          {
-  55   1          SCL=0;
-  56   1          SDA=1;
-  57   1          SCL=1;
-  58   1          Delay5us();
-  59   1          SCL=0;
-  60   1          Delay5us();
-  61   1      }
-  62          unsigned char IIC_rcvbyte_nack()
-  63          {
-  64   1          unsigned char a,dat;
-  65   1          SDA=1;
-  66   1          Delay5us(); 
-  67   1          for(a=0;a<8;a++)
-  68   1          {
-  69   2              SCL=1;
-  70   2              Delay5us();
-  71   2              dat<<=1;
-  72   2              dat|=SDA;
-  73   2              Delay5us();
-  74   2              SCL=0;
-  75   2              Delay5us();
-  76   2      
-  77   2          }
-  78   1      
-  79   1          //给出NACK信号
-  80   1         //IIC_Nack();
-  81   1       //   _nop_();
+  54          void IIC_Nack()
+  55          {
+  56   1          SCL=0;
+  57   1          SDA=1;
+  58   1          SCL=1;
+  59   1          Delay5us();
+  60   1          SCL=0;
+  61   1          Delay5us();
+  62   1      }
+  63          unsigned char IIC_rcvbyte_nack()
+  64          {
+  65   1          unsigned char a,dat;
+  66   1          SDA=1;
+  67   1          Delay5us(); 
+  68   1          for(a=0;a<8;a++)
+  69   1          {
+  70   2              SCL=1;
+  71   2              Delay5us();
+  72   2              dat<<=1;
+  73   2              dat|=SDA;
+  74   2              Delay5us();
+  75   2              SCL=0;
+  76   2              Delay5us();
+  77   2      
+  78   2          }
+  79   1      
+  80   1          //给出NACK信号
+  81   1         //IIC_Nack();
   82   1       //   _nop_();
-  83   1        //  SCL=0;
-  84   1         // _nop_();
-  85   1       //   _nop_();
-  86   1        //  SDA=1;
-  87   1         // _nop_();
-  88   1          //_nop_();
-  89   1         // SCL=1;
-  90   1        //  _nop_();
-  91   1         // _nop_();
-  92   1         // SCL=0;
-  93   1        //  _nop_();
-  94   1         // _nop_();
-  95   1          return dat;
-  96   1      }
-  97          unsigned char IIC_rcvbyte_ack()
-  98          {
-  99   1          unsigned char retc;
- 100   1          unsigned char bitcnt;
- 101   1          retc=0;
- 102   1          SDA=1;
- 103   1          for(bitcnt=0;bitcnt<8;bitcnt++)
- 104   1          {
- 105   2              _nop_();
+  83   1       //   _nop_();
+  84   1        //  SCL=0;
+  85   1         // _nop_();
+  86   1       //   _nop_();
+  87   1        //  SDA=1;
+  88   1         // _nop_();
+  89   1          //_nop_();
+  90   1         // SCL=1;
+  91   1        //  _nop_();
+  92   1         // _nop_();
+  93   1         // SCL=0;
+  94   1        //  _nop_();
+  95   1         // _nop_();
+  96   1          return dat;
+  97   1      }
+  98          unsigned char IIC_rcvbyte_ack()
+  99          {
+ 100   1          unsigned char retc;
+ 101   1          unsigned char bitcnt;
+ 102   1          retc=0;
+ 103   1          SDA=1;
+ 104   1          for(bitcnt=0;bitcnt<8;bitcnt++)
+ 105   1          {
  106   2              _nop_();
- 107   2              SCL=0;
- 108   2              _nop_();
+ 107   2              _nop_();
+ 108   2              SCL=0;
  109   2              _nop_();
- 110   2              SCL=1;
- 111   2              _nop_();
+ 110   2              _nop_();
+ 111   2              SCL=1;
  112   2              _nop_();
- 113   2              retc=retc<<1;
- 114   2              if(SDA==1)
- 115   2              retc=retc+1;
-C51 COMPILER V9.56.0.0   IIC                                                               04/13/2018 18:15:52 PAGE 3   
+ 113   2              _nop_();
+ 114   2              retc=retc<<1;
+ 115   2              if(SDA==1)
+C51 COMPILER V9.56.0.0   IIC                                                               04/19/2018 22:17:11 PAGE 3   
 
- 116   2              _nop_();
+ 116   2              retc=retc+1;
  117   2              _nop_();
- 118   2          }
- 119   1          //给出ACK信号
- 120   1          _nop_();
+ 118   2              _nop_();
+ 119   2          }
+ 120   1          //给出ACK信号
  121   1          _nop_();
- 122   1          SCL=0;
- 123   1          _nop_();
+ 122   1          _nop_();
+ 123   1          SCL=0;
  124   1          _nop_();
- 125   1          SDA=0;
- 126   1          _nop_();
+ 125   1          _nop_();
+ 126   1          SDA=0;
  127   1          _nop_();
- 128   1          SCL=1;
- 129   1          _nop_();
+ 128   1          _nop_();
+ 129   1          SCL=1;
  130   1          _nop_();
- 131   1          SCL=0;
- 132   1          _nop_();
+ 131   1          _nop_();
+ 132   1          SCL=0;
  133   1          _nop_();
- 134   1          return(retc);
- 135   1      }
+ 134   1          _nop_();
+ 135   1          return(retc);
+ 136   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

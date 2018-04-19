@@ -25,7 +25,7 @@ extern void OLED_Init(void);
 extern void OLED_Clear(void);
 extern void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned char y1,unsigned char BMP[]);
 extern void OLED_Draw(unsigned char x,unsigned char y,unsigned int Length,unsigned int width,unsigned char* BMP);
-
+extern void displayHRmodeIcon();
 
 
 #endif

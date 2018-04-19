@@ -160,25 +160,10 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 	    }
 	}
 } 
-//void OLED_Draw(unsigned char x,unsigned char y,unsigned int Length,unsigned int width,unsigned char* BMP)
-//{
-//	unsigned int i,h;
-//	//OLED_Set_Pos(x,y);
-//	for(i=0;i<width;i++)
-//	{
-//		OLED_Set_Pos(x,y+i);
-//		for(h=0;h<Length;h++)
-//		{
-//			OLED_WR_Byte(*BMP,OLED_DATA);
-//			BMP++;
-//		}
-//		
-//	}
-//}
+
 void OLED_Draw(unsigned char x,unsigned char y,unsigned int Length,unsigned int width,unsigned char* BMP)
 {
 	unsigned int i,h;
-	//OLED_Set_Pos(x,y);
 	for(i=0;i<Length;i++)
 	{
 		OLED_Set_Pos(x+i,y);

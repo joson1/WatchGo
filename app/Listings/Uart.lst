@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   UART                                                              04/13/2018 18:15:53 PAGE 1   
+C51 COMPILER V9.56.0.0   UART                                                              04/19/2018 22:17:12 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE UART
@@ -10,12 +10,12 @@ COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\Lib\src\U
 line level    source
 
    1          #include "Uart.h"
-   2          
+   2          #include "common.h"
    3          
-   4           bit busy=0;
-   5           xdata char buffer[16] = 0;
-   6           xdata char Wptr=0;
-   7           xdata char Rptr=0;
+   4          bit busy=0;
+   5          char xdata buffer[16] = 0;
+   6          char xdata Wptr=0;
+   7          char xdata Rptr=0;
    8          
    9          
   10          void Uart2Isr() interrupt 8
@@ -25,62 +25,59 @@ line level    source
   14   2              S2CON &= ~0x02;
   15   2              busy=0;
   16   2          }
-  17   1          if(S2CON & 0x01)
+  17   1          if(S2CON & 0x01)    //接收中断
   18   1          {
   19   2              S2CON &= 0xfe;
   20   2              buffer[Wptr++]=S2BUF;
   21   2              Wptr &= 0x0f;
-  22   2              
-  23   2              
-  24   2              ////串口命令
-  25   2      
-  26   2              // if (Rptr != Wptr)
-  27   2              // {
-  28   2      
-  29   2              //     ID=MAX30100_getPartID();
-  30   2              //     Uart2SendChar(buffer[Rptr++]);
-  31   2              //     Uart2SendChar(ID);
-  32   2                  
-  33   2              //     Rptr &= 0x0f;
-  34   2              // }
-  35   2              ///////
-  36   2        
-  37   2          }
-  38   1      }
-  39          
-  40          void Uart2Init()
-  41          {
-  42   1          S2CON=0x50;
-  43   1          T2L=BRT;
-  44   1          T2H=BRT>>8;
-  45   1          AUXR |= 0x14;
-  46   1          Wptr=0x00;
-  47   1          Rptr=0x00;
-  48   1          busy=0;
-  49   1          IE2=0x01;
-  50   1          // EA=1;
-  51   1      }
-  52          
-  53          void Uart2SendChar(char Sdata)
-C51 COMPILER V9.56.0.0   UART                                                              04/13/2018 18:15:53 PAGE 2   
+  22   2          
+  23   2              switch (buffer[Wptr-1])
+  24   2              {
+  25   3                  
+  26   3                  case'T' : SMode=1; break;
+  27   3                  case'H' : SMode=2; break;
+  28   3                  default : break;
+  29   3      
+  30   3              }
+  31   2              
+  32   2      
+  33   2        
+  34   2          }
+  35   1      }
+  36          
+  37          void Uart2Init()
+  38          {
+  39   1          S2CON=0x50;
+  40   1          T2L=BRT;
+  41   1          T2H=BRT>>8;
+  42   1          AUXR |= 0x14;
+  43   1          Wptr=0x00;
+  44   1          Rptr=0x00;
+  45   1          busy=0;
+  46   1          IE2=0x01;
+  47   1          // EA=1;
+  48   1      }
+  49          
+  50          void Uart2SendChar(char Sdata)
+  51          {
+  52   1          while(busy);
+  53   1          busy=1;
+C51 COMPILER V9.56.0.0   UART                                                              04/19/2018 22:17:12 PAGE 2   
 
-  54          {
-  55   1          while(busy);
-  56   1          busy=1;
-  57   1          S2BUF=Sdata;
-  58   1      }
-  59          
-  60          void Uart2SendStr(char* p)
-  61          {
-  62   1          while(*p)
-  63   1          {
-  64   2              Uart2SendChar(*p++);
-  65   2          }
-  66   1      }
+  54   1          S2BUF=Sdata;
+  55   1      }
+  56          
+  57          void Uart2_SendStr(char* p)
+  58          {
+  59   1          while(*p)
+  60   1          {
+  61   2              Uart2SendChar(*p++);
+  62   2          }
+  63   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    150    ----
+   CODE SIZE        =    188    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     18    ----
    PDATA SIZE       =   ----    ----

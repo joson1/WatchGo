@@ -16,9 +16,9 @@ extern xdata char Wptr;
 extern xdata char Rptr;
 
 
-void Uart2SendStr(char* p);
-void Uart2SendChar(char Sdata);
-void Uart2Init();
+extern void Uart2_SendStr(char* p);
+extern void Uart2SendChar(char Sdata);
+extern void Uart2Init();
 
 
 #endif

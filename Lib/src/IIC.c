@@ -1,4 +1,5 @@
 #include "IIC.h"
+#include "common.h"
 
 void IIC_Start()
 {

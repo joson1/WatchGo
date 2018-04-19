@@ -6,6 +6,7 @@
 
 #define MAIN_Fosc 24000    //¾§ÕñÆµÂÊ 24000»ò12000
 
+extern unsigned char xdata SMode;
 
 extern void Delayus(unsigned int us);
 extern void Delayms(unsigned ms);

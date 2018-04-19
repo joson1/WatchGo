@@ -99,10 +99,10 @@ extern SensorReadout xdata readoutBuffer[16];
 extern SensorReadout xdata *head;
 extern SensorReadout xdata *tail;
 extern unsigned short MAX30100_count;
-extern char MAX30100_Init();
-extern unsigned char MAX30100_getPartID();
-extern char MAX30100_readRegister(unsigned char RAdd);
-extern void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data);
+extern char MAX30100_Init();		//1
+extern unsigned char MAX30100_getPartID();	//2
+extern char MAX30100_readRegister(unsigned char RAdd);	
+extern void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data);	
 void MAX30100_setMode(Mode mode);
 void MAX30100_setLedsPulseWidth(LEDPulseWidth ledPulseWidth);
 void MAX30100_setSamplingRate(SamplingRate samplingRate);
@@ -110,16 +110,16 @@ void MAX30100_setLedsCurrent(LEDCurrent irLedCurrent, LEDCurrent redLedCurrent);
 void MAX30100_setHighresModeEnabled(char enabled);
 void MAX30100_update();
 char MAX30100_getRawValues(unsigned short *ir, unsigned short *red);
-extern float MAX30100_getTemperature();
-extern void MAX30100_startTemperatureSampling(); 
-extern float MAX30100_retrieveTemperature();
+extern float MAX30100_getTemperature(); //4
+extern void MAX30100_startTemperatureSampling();	//3
+extern float MAX30100_retrieveTemperature();	//5
 extern char MAX30100_readRegister(unsigned char RAdd);
-extern void MAX30100_restFifo();
+extern void MAX30100_restFifo();	//0
 extern void MAX30100_readMultiByte(unsigned char address,unsigned char* MAX30100_buffer,unsigned char length);
 extern char MAX30100_Buffer_Push(SensorReadout value);
 void readFifoData();
 SensorReadout MAX30100_Buffer_pop();
-void shutdown();
-void resume();
+void shutdown();				//6
+void resume();                   //7
 
 #endif

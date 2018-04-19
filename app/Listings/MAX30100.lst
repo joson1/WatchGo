@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 1   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/19/2018 22:17:11 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAX30100
@@ -49,7 +49,7 @@ line level    source
   38          void MAX30100_restFifo()
   39          {
   40   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFIOEDPtr,0);
-  41   1          MAX30100_writeRegister( ADDRESS_MAX30100_FIFOWRPtr,0);
+  41   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFOWRPtr,0);
   42   1          MAX30100_writeRegister(ADDRESS_MAX30100_FIFOData,0);
   43   1      }
   44          
@@ -62,7 +62,7 @@ line level    source
   51          void MAX30100_startTemperatureSampling()
   52          {
   53   1          unsigned char modeConfig=MAX30100_readRegister(MAX30100_REG_MODE_CONFIGURATION);
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 2   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/19/2018 22:17:11 PAGE 2   
 
   54   1          modeConfig |= MAX30100_MC_TEMP_EN;
   55   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,modeConfig);
@@ -126,7 +126,7 @@ line level    source
  113   1      }
  114          
  115          
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 3   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/19/2018 22:17:11 PAGE 3   
 
  116          void MAX30100_setMode(Mode mode)
  117          {
@@ -190,7 +190,7 @@ line level    source
  175   1          {
  176   2              tail=readoutBuffer;
  177   2          }
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 4   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/19/2018 22:17:11 PAGE 4   
 
  178   1          *tail = value;
  179   1          if(MAX30100_count == 16)
@@ -254,7 +254,7 @@ line level    source
  236   1          modeConfig &= ~MAX30100_MC_SHDN;
  237   1          MAX30100_writeRegister(MAX30100_REG_MODE_CONFIGURATION,modeConfig);
  238   1      }
-C51 COMPILER V9.56.0.0   MAX30100                                                          04/13/2018 18:15:52 PAGE 5   
+C51 COMPILER V9.56.0.0   MAX30100                                                          04/19/2018 22:17:11 PAGE 5   
 
 
 
