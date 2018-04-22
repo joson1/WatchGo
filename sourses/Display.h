@@ -20,6 +20,8 @@
 #define PosBattery_X 0
 #define PosBattery_Y 0
 
+
+
 extern void clearNum(unsigned char x,unsigned char y,unsigned int Length,unsigned int width);
 extern void displayHoursH(unsigned char NUM);
 extern void displayHoursL(unsigned char NUM);

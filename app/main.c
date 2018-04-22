@@ -7,6 +7,10 @@
 #include "MAX30100.h"
 #include "MSTP.h"
 
+#define refreashDisplay()  preHourH=Hour/10;preMinuteH=Minute/10; displayHoursH(preHourH);displayHoursL(Hour%10);displayMinuteH(preMinuteH);displayMinuteL(Minute%10);\
+							displayIcon_Battery(2,0xff);displayIcon_Bluetooth(0x00)
+
+
 #define DEBUG
 //#include "Power.h"
 
@@ -72,16 +76,20 @@ void main()
 			if(bDataComplete)
 			{
 				bDataComplete=0;
-				#ifdef DEBUG
-				sendPack(&buffer[0]);
-				#endif
-				if(CheckPack(buffer))
+
+				if(CheckPack(buffer))   //CheckPack(buffer)
 				{
+					#ifdef DEBUG
+					sendPack(&buffer[0]);
+					#endif
 					switch(buffer[0])
 					{
 						case 0x00 : switch(buffer[2])
 										{
 											case 0x02:  SMode=HeartRateMode;displayHRmodeIcon(); break;
+											case 0x03:  Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];
+														refreashDisplay();
+														break;
 											
 											default : break;
 										} break;
@@ -151,13 +159,17 @@ void main()
 					{
 						case 0x00 : switch(buffer[2])
 										{
-											case 0x02:  SMode=TimeMode;OLED_Clear(); break;
+											case 0x02:  SMode=TimeMode;OLED_Clear(); 
+														refreashDisplay();
+											
+														break;
 											case 0x03:  
 														tmpCnt[0]=MAX30100_getPartID();
 														tmpPack.type=0x01;tmpPack.cmd=0x03;tmpPack.cnt=tmpCnt;tmpPack.length=1;
 														doPack(tmpPack,buffer);
 														sendPack(buffer);
 														break;
+											
 											default : break;
 										} break;
 						case 0x01 : switch(buffer[2])
