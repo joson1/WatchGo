@@ -1,8 +1,10 @@
 #include "Uart.h"
 #include "common.h"
 
+
 bit busy=0;
-char xdata buffer[16] = 0;
+bit bDataComplete=0;
+char xdata buffer[10] = 0;
 char xdata Wptr=0;
 char xdata Rptr=0;
 
@@ -18,19 +20,14 @@ void Uart2Isr() interrupt 8
     {
         S2CON &= 0xfe;
         buffer[Wptr++]=S2BUF;
-        Wptr &= 0x0f;
-    
-        switch (buffer[Wptr-1])
+        if(Wptr==10)
         {
-            
-            case'T' : SMode=1; break;
-            case'H' : SMode=2; break;
-            default : break;
-
-        }
+            bDataComplete=1;
+            Wptr =0;
+        } 
         
 
-	
+    
     }
 }
 

@@ -7,7 +7,7 @@ unsigned short MAX30100_count;
 
 void MAX30100_writeRegister(unsigned char RAdd,unsigned char Data)
 {
-
+    
     OBIIC_Start();
     OBIIC_SendData(ADDRESS_MAX30100);
     OBIIC_SendACK();

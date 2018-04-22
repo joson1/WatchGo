@@ -5,6 +5,9 @@
 #include "Timer.h"
 #include "Uart.h"
 #include "MAX30100.h"
+#include "MSTP.h"
+
+#define DEBUG
 //#include "Power.h"
 
 unsigned char xdata SMode=0;
@@ -18,7 +21,8 @@ enum FucState
 
 void main()
 {
-	
+	pack tmpPack;
+	unsigned char tmpCnt[6]=0;
 	unsigned char ID=0 ;
 
 	P_SW2=0xb0;
@@ -58,7 +62,42 @@ void main()
 
 		while(SMode==TimeMode)
 		{
+			// if(Rptr!=Wptr)
+			// {
+			// 	Uart2SendChar(buffer[Rptr++]);
+			// 	Rptr&=0x09;
+			// }
+			
 
+			if(bDataComplete)
+			{
+				bDataComplete=0;
+				#ifdef DEBUG
+				sendPack(&buffer[0]);
+				#endif
+				if(CheckPack(buffer))
+				{
+					switch(buffer[0])
+					{
+						case 0x00 : switch(buffer[2])
+										{
+											case 0x02:  SMode=HeartRateMode;displayHRmodeIcon(); break;
+											
+											default : break;
+										} break;
+						case 0x01 : switch(buffer[2])
+									{
+										case 0x02 : break;
+										default : break;
+									}break;
+						default : break;
+					}
+					clearBuffer(&buffer[0]);
+
+				}
+
+
+			}
 				
 			if(isSecondChange)
 			{
@@ -102,26 +141,36 @@ void main()
 
 		while(SMode==HeartRateMode)
 		{
-			displayHRmodeIcon();
-			if (Rptr != Wptr)
+			
+			if(bDataComplete)
 			{
-				
-				// ID=MAX30100_getPartID();
-				// Uart2SendChar(buffer[Rptr++]);
-				// Uart2SendChar(ID);
-				switch(buffer[Rptr-1])
+				bDataComplete=0;
+				if(CheckPack(buffer))
 				{
-					case 1 :  Uart2SendChar( MAX30100_Init() );break;
-					case 2 :  Uart2SendChar( MAX30100_getPartID() );break;
-					case 3 :  MAX30100_startTemperatureSampling();Uart2_SendStr("wait a moment then get temperature\n");break;
-					case 4 :  Uart2_SendStr("integer"); Uart2SendChar(MAX30100_readRegister(ADDRESS_MAX30100_TEMP)); Uart2_SendStr("\n");break;
-					case 6 :  shutdown(); break;
-					case 7 :  resume(); break;
-					default : break;
+					switch(buffer[0])
+					{
+						case 0x00 : switch(buffer[2])
+										{
+											case 0x02:  SMode=TimeMode;OLED_Clear(); break;
+											case 0x03:  
+														tmpCnt[0]=MAX30100_getPartID();
+														tmpPack.type=0x01;tmpPack.cmd=0x03;tmpPack.cnt=tmpCnt;tmpPack.length=1;
+														doPack(tmpPack,buffer);
+														sendPack(buffer);
+														break;
+											default : break;
+										} break;
+						case 0x01 : switch(buffer[2])
+									{
+										case 0x02 : break;
+										default : break;
+									}break;
+						default : break;
+					}
+					clearBuffer(&buffer[0]);
+
 				}
-				
-				
-				Rptr &= 0x0f;
+
 
 			}
 		

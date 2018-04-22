@@ -9,9 +9,9 @@
 #define BRT (65536-FOSC/115200/4)
 //115200 RxD P10 TxD11  460800
 
-
+extern bit bDataComplete;
 extern bit busy;
-extern xdata char buffer[16];
+extern xdata char buffer[10];
 extern xdata char Wptr;
 extern xdata char Rptr;
 

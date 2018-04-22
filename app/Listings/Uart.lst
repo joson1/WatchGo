@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   UART                                                              04/19/2018 22:17:12 PAGE 1   
+C51 COMPILER V9.56.0.0   UART                                                              04/22/2018 14:46:35 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE UART
@@ -12,78 +12,75 @@ line level    source
    1          #include "Uart.h"
    2          #include "common.h"
    3          
-   4          bit busy=0;
-   5          char xdata buffer[16] = 0;
-   6          char xdata Wptr=0;
-   7          char xdata Rptr=0;
-   8          
-   9          
-  10          void Uart2Isr() interrupt 8
-  11          {
-  12   1          if(S2CON & 0x02)
-  13   1          {
-  14   2              S2CON &= ~0x02;
-  15   2              busy=0;
-  16   2          }
-  17   1          if(S2CON & 0x01)    //接收中断
-  18   1          {
-  19   2              S2CON &= 0xfe;
-  20   2              buffer[Wptr++]=S2BUF;
-  21   2              Wptr &= 0x0f;
-  22   2          
-  23   2              switch (buffer[Wptr-1])
+   4          
+   5          bit busy=0;
+   6          bit bDataComplete=0;
+   7          char xdata buffer[10] = 0;
+   8          char xdata Wptr=0;
+   9          char xdata Rptr=0;
+  10          
+  11          
+  12          void Uart2Isr() interrupt 8
+  13          {
+  14   1          if(S2CON & 0x02)
+  15   1          {
+  16   2              S2CON &= ~0x02;
+  17   2              busy=0;
+  18   2          }
+  19   1          if(S2CON & 0x01)    //接收中断
+  20   1          {
+  21   2              S2CON &= 0xfe;
+  22   2              buffer[Wptr++]=S2BUF;
+  23   2              if(Wptr==10)
   24   2              {
-  25   3                  
-  26   3                  case'T' : SMode=1; break;
-  27   3                  case'H' : SMode=2; break;
-  28   3                  default : break;
-  29   3      
-  30   3              }
-  31   2              
-  32   2      
-  33   2        
-  34   2          }
-  35   1      }
-  36          
-  37          void Uart2Init()
-  38          {
-  39   1          S2CON=0x50;
-  40   1          T2L=BRT;
-  41   1          T2H=BRT>>8;
-  42   1          AUXR |= 0x14;
-  43   1          Wptr=0x00;
-  44   1          Rptr=0x00;
-  45   1          busy=0;
-  46   1          IE2=0x01;
-  47   1          // EA=1;
-  48   1      }
-  49          
-  50          void Uart2SendChar(char Sdata)
-  51          {
-  52   1          while(busy);
-  53   1          busy=1;
-C51 COMPILER V9.56.0.0   UART                                                              04/19/2018 22:17:12 PAGE 2   
+  25   3                  bDataComplete=1;
+  26   3                  Wptr =0;
+  27   3              } 
+  28   2              
+  29   2      
+  30   2          
+  31   2          }
+  32   1      }
+  33          
+  34          void Uart2Init()
+  35          {
+  36   1          S2CON=0x50;
+  37   1          T2L=BRT;
+  38   1          T2H=BRT>>8;
+  39   1          AUXR |= 0x14;
+  40   1          Wptr=0x00;
+  41   1          Rptr=0x00;
+  42   1          busy=0;
+  43   1          IE2=0x01;
+  44   1          // EA=1;
+  45   1      }
+  46          
+  47          void Uart2SendChar(char Sdata)
+  48          {
+  49   1          while(busy);
+  50   1          busy=1;
+  51   1          S2BUF=Sdata;
+  52   1      }
+  53          
+C51 COMPILER V9.56.0.0   UART                                                              04/22/2018 14:46:35 PAGE 2   
 
-  54   1          S2BUF=Sdata;
-  55   1      }
-  56          
-  57          void Uart2_SendStr(char* p)
-  58          {
-  59   1          while(*p)
-  60   1          {
-  61   2              Uart2SendChar(*p++);
-  62   2          }
-  63   1      }
+  54          void Uart2_SendStr(char* p)
+  55          {
+  56   1          while(*p)
+  57   1          {
+  58   2              Uart2SendChar(*p++);
+  59   2          }
+  60   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    188    ----
+   CODE SIZE        =    154    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     18    ----
+   XDATA SIZE       =     12    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----       3
    IDATA SIZE       =   ----    ----
-   BIT SIZE         =      1    ----
+   BIT SIZE         =      2    ----
 END OF MODULE INFORMATION.
 
 

@@ -1,0 +1,79 @@
+C51 COMPILER V9.56.0.0   BUTTOM                                                            04/21/2018 22:09:41 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE BUTTOM
+OBJECT MODULE PLACED IN \\192.168.2.201\Users\zhongzuan\Buttom.obj
+COMPILER INVOKED BY: D:\Program Files (x86)\Keil_v5\C51\BIN\C51.EXE ..\sourses\Buttom.c OPTIMIZE(8,SPEED) BROWSE INCDIR(
+                    -..\Lib;..\Lib\inc;..\Lib\src;..\sourses) DEBUG OBJECTEXTEND PRINT(.\Listings\Buttom.lst) TABS(2) OBJECT(\\192.168.2.201\
+                    -Users\zhongzuan\Buttom.obj)
+
+line level    source
+
+   1          #include "Buttom.h"
+   2          
+   3          #define ptDelay 25 //25*20 500ms
+   4          
+   5          unsigned char timer1Count=0;
+*** ERROR C231 IN LINE 5 OF ..\sourses\Buttom.c: 'timer1Count': redefinition
+*** ERROR C231 IN LINE 5 OF ..\sourses\Buttom.c: 'timer1Count': redefinition
+   6          unsigned char bButtomPtd=0;
+   7          
+   8          void buttomPtdown_Double()
+   9          {
+  10   1      
+  11   1      }
+  12          
+  13          void buttomClick()
+  14          {
+  15   1      
+  16   1      
+  17   1      }
+  18          
+  19          void buttomInit()
+  20          {
+  21   1          INTCLKO=EX3;
+*** ERROR C202 IN LINE 21 OF ..\sourses\Buttom.c: 'INTCLKO': undefined identifier
+  22   1      
+  23   1      
+  24   1      }
+  25          
+  26          void onButtomPtdown_Isr interrupt 11
+  27          {
+*** ERROR C136 IN LINE 27 OF ..\sourses\Buttom.c: 'onButtomPtdown_Isr': 'void' on variable
+*** ERROR C129 IN LINE 27 OF ..\sourses\Buttom.c: missing ';' before '{'
+  28              timer1Count=0;
+  29              TL1 = 0xC0;   //设置定时初值
+  30            TH1 = 0x63;   //设置定时初值       
+  31              TR1=1;  //定时器1开始计时
+  32          
+  33              bButtomPtd++;
+  34              if(bButtomPtd>=1)
+  35              {
+  36                 buttomPtdown_Double();
+  37                  //关闭定时器1
+  38                  TR1=0;
+  39              }
+  40              
+  41          }
+  42          
+  43          void TM1_Isr() interrupt 3 
+  44          {
+  45              timer1Cuont++;
+  46              
+  47              if(timer1Cuont==ptDelay) //500ms超时，按键标志清除
+  48              {
+C51 COMPILER V9.56.0.0   BUTTOM                                                            04/21/2018 22:09:41 PAGE 2   
+
+  49                  if(bButtomPtd=1)
+  50                  {
+  51                      buttomClick();
+  52                  }
+  53                  bButtomPtd=0;
+  54                  timer1Count=0;
+  55              }
+  56          
+  57              TL1 = 0xC0;   //设置定时初值
+  58            TH1 = 0x63;   //设置定时初值                               //测试端口
+  59          }
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  5 ERROR(S)
