@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 11:39:58 PAGE 1   
+C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 22:30:41 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MAIN
@@ -62,7 +62,7 @@ line level    source
   50   1      
   51   1        MAX30100_Init();
   52   1        shutdown();
-C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 11:39:58 PAGE 2   
+C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 22:30:41 PAGE 2   
 
   53   1        OLED_Init();
   54   1      
@@ -103,132 +103,147 @@ line level    source
   89   5                {
   90   6                  case 0x00 : switch(buffer[2])
   91   6                          {
-  92   7                            case 0x02:  resume(); SMode=HeartRateMode;displayHRmodeIcon();
-  93   7                                  MAX30100_writeRegister(0x06,0x0b);
-  94   7                                  MAX30100_writeRegister(0x01,0xf0);
-  95   7                                  MAX30100_writeRegister(0x09,0x33);
-  96   7                                   break;
-  97   7                            case 0x03:  Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];
-  98   7                                  refreashDisplay();
-  99   7                                  break;
- 100   7                            
- 101   7                            default : break;
- 102   7                          } break;
- 103   6                  case 0x01 : switch(buffer[2])
- 104   6                        {
- 105   7                          case 0x02 : break;
- 106   7                          default : break;
- 107   7                        }break;
- 108   6                  default : break;
- 109   6                }
- 110   5                clearBuffer(&buffer[0]);
- 111   5      
- 112   5              }
- 113   4      
- 114   4      
-C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 11:39:58 PAGE 3   
+  92   7                            case 0x02:  //进入心率模式
+  93   7                                  resume(); SMode=HeartRateMode;displayHRmodeIcon();
+  94   7                                  MAX30100_writeRegister(0x06,0x0b);
+  95   7                                  MAX30100_writeRegister(0x01,0xf0);
+  96   7                                  MAX30100_writeRegister(0x09,0x33);
+  97   7                                   break;
+  98   7                            case 0x03:  //校准时间
+  99   7                                  Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];TickCount=0;
+ 100   7                                  refreashDisplay();
+ 101   7                                  break;
+ 102   7                            
+ 103   7                            default : break;
+ 104   7                          } break;
+ 105   6                  case 0x01 : switch(buffer[2])
+ 106   6                        {
+ 107   7                          case 0x02 : break;
+ 108   7                          default : break;
+ 109   7                        }break;
+ 110   6                  default : break;
+ 111   6                }
+ 112   5                clearBuffer(&buffer[0]);
+ 113   5      
+ 114   5              }
+C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 22:30:41 PAGE 3   
 
- 115   4            }
- 116   3              
- 117   3            if(isSecondChange)
- 118   3            {
- 119   4              displayColon(0x00);
- 120   4            
- 121   4              isSecondChange=0;
- 122   4            }
- 123   3      
- 124   3            if(TickCount==25) displayColon(0xff);
+ 115   4      
+ 116   4      
+ 117   4            }
+ 118   3              
+ 119   3            if(isSecondChange)
+ 120   3            {
+ 121   4              displayColon(0x00);
+ 122   4            
+ 123   4              isSecondChange=0;
+ 124   4            }
  125   3      
- 126   3            if(isMinuteChange)
- 127   3            {
- 128   4              displayMinuteL(Minute%10);
- 129   4              if((Minute/10)!=preMinuteH)
- 130   4              { 
- 131   5                preMinuteH=Minute/10;
- 132   5                displayMinuteH(preMinuteH);
- 133   5                
- 134   5              }
- 135   4              isMinuteChange=0;
- 136   4      
- 137   4            }
- 138   3            if(isHourChange)
- 139   3            {
- 140   4              displayHoursL(Hour%10);
- 141   4              if((Hour/10)!=preHourH) 
- 142   4              {
- 143   5                preHourH=Hour/10;
- 144   5                displayHoursH(preHourH);
- 145   5              }
- 146   4              isHourChange=0;
- 147   4            }
- 148   3      
- 149   3      
- 150   3          
- 151   3        //  getBatteryState();
- 152   3        //  displayIcon_Battery(4,0xff);
- 153   3          
- 154   3        
- 155   3          }
- 156   2      
- 157   2          while(SMode==HeartRateMode)
- 158   2          {
- 159   3            
- 160   3            if(bDataComplete)
- 161   3            {
- 162   4              bDataComplete=0;
- 163   4              if(CheckPack(buffer))
- 164   4              {
- 165   5                switch(buffer[0])
- 166   5                {
- 167   6                  case 0x00 : switch(buffer[2])
- 168   6                          {
- 169   7                            case 0x02:  shutdown(); SMode=TimeMode;OLED_Clear(); 
- 170   7                                  refreashDisplay();
- 171   7                            
- 172   7                                  break;
- 173   7                            case 0x03:  
- 174   7                                  tmpCnt[0]=MAX30100_getPartID();
- 175   7                                  tmpPack.type=0x01;tmpPack.cmd=0x03;tmpPack.cnt=tmpCnt;tmpPack.length=1;
- 176   7                                  doPack(tmpPack,buffer);
-C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 11:39:58 PAGE 4   
+ 126   3            if(TickCount==25) displayColon(0xff);
+ 127   3      
+ 128   3            if(isMinuteChange)
+ 129   3            {
+ 130   4              displayMinuteL(Minute%10);
+ 131   4              if((Minute/10)!=preMinuteH)
+ 132   4              { 
+ 133   5                preMinuteH=Minute/10;
+ 134   5                displayMinuteH(preMinuteH);
+ 135   5                
+ 136   5              }
+ 137   4              isMinuteChange=0;
+ 138   4      
+ 139   4            }
+ 140   3            if(isHourChange)
+ 141   3            {
+ 142   4              displayHoursL(Hour%10);
+ 143   4              if((Hour/10)!=preHourH) 
+ 144   4              {
+ 145   5                preHourH=Hour/10;
+ 146   5                displayHoursH(preHourH);
+ 147   5              }
+ 148   4              isHourChange=0;
+ 149   4            }
+ 150   3      
+ 151   3      
+ 152   3          
+ 153   3        //  getBatteryState();
+ 154   3        //  displayIcon_Battery(4,0xff);
+ 155   3          
+ 156   3        
+ 157   3          }
+ 158   2      /////////////////////////心率模式///////////////
+ 159   2          while(SMode==HeartRateMode)       
+ 160   2          {
+ 161   3            
+ 162   3            if(bDataComplete)
+ 163   3            {
+ 164   4      
+ 165   4              bDataComplete=0;
+ 166   4      
+ 167   4      
+ 168   4              if(CheckPack(buffer))
+ 169   4              {
+ 170   5      
+ 171   5      
+ 172   5                switch(buffer[0])
+ 173   5                {
+ 174   6                  case 0x00 : switch(buffer[2])
+ 175   6                          {
+ 176   7                            case 0x02:  //退出心率模式
+C51 COMPILER V9.56.0.0   MAIN                                                              04/23/2018 22:30:41 PAGE 4   
 
- 177   7                                  sendPack(buffer);
- 178   7                                  break;
- 179   7                            
- 180   7                            default : break;
- 181   7                          } break;
- 182   6                  case 0x01 : switch(buffer[2])
- 183   6                        {
- 184   7                          case 0x02 : break;
- 185   7                          default : break;
- 186   7                        }break;
- 187   6                  default : break;
- 188   6                }
- 189   5                clearBuffer(&buffer[0]);
- 190   5      
- 191   5              }
- 192   4      
- 193   4      
- 194   4            }
- 195   3          
- 196   3      
- 197   3            
- 198   3          }
- 199   2          while(SMode==StepMode)
- 200   2          {
- 201   3      
- 202   3      
- 203   3          }
- 204   2      
- 205   2      
- 206   2        }
- 207   1      
- 208   1      
- 209   1      }
+ 177   7                                  shutdown(); SMode=TimeMode;OLED_Clear(); 
+ 178   7                                  refreashDisplay();
+ 179   7      
+ 180   7                                  break;
+ 181   7                            case 0x03:  //获取MAX30100ID
+ 182   7                                  tmpCnt[0]=MAX30100_getPartID();
+ 183   7                                  tmpPack.type=0x01;tmpPack.cmd=0x03;tmpPack.cnt=tmpCnt;tmpPack.length=1;
+ 184   7                                  doPack(tmpPack,buffer);
+ 185   7                                  sendPack(buffer);
+ 186   7                                  break;
+ 187   7                            case 0x04:  //获取温度
+ 188   7                                  MAX30100_startTemperatureSampling();Delayms(500);     
+ 189   7                                  tmpCnt[0]=MAX30100_readRegister(ADDRESS_MAX30100_TEMP);
+ 190   7                                  tmpCnt[1]=MAX30100_readRegister(ADDRESS_MAX30100_TEMP+1);
+ 191   7                                  tmpPack.type=0x01;tmpPack.cmd=0x04;tmpPack.cnt=tmpCnt;tmpPack.length=2;
+ 192   7                                  doPack(tmpPack,buffer);
+ 193   7                                  sendPack(buffer);
+ 194   7                                  break;
+ 195   7                            default : break;
+ 196   7                          } break;
+ 197   6                  case 0x01 : switch(buffer[2])
+ 198   6                        {
+ 199   7                          case 0x02 : break;
+ 200   7                          default : break;
+ 201   7                        }break;
+ 202   6                  default : break;
+ 203   6                }
+ 204   5                clearBuffer(&buffer[0]);
+ 205   5      
+ 206   5              }
+ 207   4      
+ 208   4      
+ 209   4            }
+ 210   3          
+ 211   3      
+ 212   3            
+ 213   3          }
+ 214   2          while(SMode==StepMode)
+ 215   2          {
+ 216   3      
+ 217   3      
+ 218   3          }
+ 219   2      
+ 220   2      
+ 221   2        }
+ 222   1      
+ 223   1      
+ 224   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    810    ----
+   CODE SIZE        =    867    ----
    CONSTANT SIZE    =     16    ----
    XDATA SIZE       =      1    ----
    PDATA SIZE       =   ----    ----

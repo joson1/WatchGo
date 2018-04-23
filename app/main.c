@@ -89,12 +89,14 @@ void main()
 					{
 						case 0x00 : switch(buffer[2])
 										{
-											case 0x02:  resume(); SMode=HeartRateMode;displayHRmodeIcon();
+											case 0x02:  //进入心率模式
+														resume(); SMode=HeartRateMode;displayHRmodeIcon();
 														MAX30100_writeRegister(0x06,0x0b);
 														MAX30100_writeRegister(0x01,0xf0);
 														MAX30100_writeRegister(0x09,0x33);
 														 break;
-											case 0x03:  Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];
+											case 0x03:  //校准时间
+														Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];TickCount=0;
 														refreashDisplay();
 														break;
 											
@@ -153,30 +155,43 @@ void main()
 		
 	
 		}
-
-		while(SMode==HeartRateMode)
+/////////////////////////心率模式///////////////
+		while(SMode==HeartRateMode)       
 		{
 			
 			if(bDataComplete)
 			{
+
 				bDataComplete=0;
+
+
 				if(CheckPack(buffer))
 				{
+
+
 					switch(buffer[0])
 					{
 						case 0x00 : switch(buffer[2])
 										{
-											case 0x02:  shutdown(); SMode=TimeMode;OLED_Clear(); 
+											case 0x02:  //退出心率模式
+														shutdown(); SMode=TimeMode;OLED_Clear(); 
 														refreashDisplay();
-											
+
 														break;
-											case 0x03:  
+											case 0x03:  //获取MAX30100ID
 														tmpCnt[0]=MAX30100_getPartID();
 														tmpPack.type=0x01;tmpPack.cmd=0x03;tmpPack.cnt=tmpCnt;tmpPack.length=1;
 														doPack(tmpPack,buffer);
 														sendPack(buffer);
 														break;
-											
+											case 0x04:  //获取温度
+														MAX30100_startTemperatureSampling();Delayms(500);			
+														tmpCnt[0]=MAX30100_readRegister(ADDRESS_MAX30100_TEMP);
+														tmpCnt[1]=MAX30100_readRegister(ADDRESS_MAX30100_TEMP+1);
+														tmpPack.type=0x01;tmpPack.cmd=0x04;tmpPack.cnt=tmpCnt;tmpPack.length=2;
+														doPack(tmpPack,buffer);
+														sendPack(buffer);
+														break;
 											default : break;
 										} break;
 						case 0x01 : switch(buffer[2])
