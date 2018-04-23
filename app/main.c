@@ -37,16 +37,19 @@ void main()
 	
 	//	powerInit();
 
-	Timer0Init();
+	//Timer0Init();
 	SMode=TimeMode;
 
-	MAX30100_writeRegister(0x06,0x0b);
-	MAX30100_writeRegister(0x01,0xf0);
-	MAX30100_writeRegister(0x09,0x33);
+	// MAX30100_writeRegister(0x06,0x0b);
+	// MAX30100_writeRegister(0x01,0xf0);
+	// MAX30100_writeRegister(0x09,0x33);
+
 	
 	Uart2Init();
 	Timer0Init();
 
+	MAX30100_Init();
+	shutdown();
 	OLED_Init();
 
 	displayHoursH(0);
@@ -86,7 +89,11 @@ void main()
 					{
 						case 0x00 : switch(buffer[2])
 										{
-											case 0x02:  SMode=HeartRateMode;displayHRmodeIcon(); break;
+											case 0x02:  resume(); SMode=HeartRateMode;displayHRmodeIcon();
+														MAX30100_writeRegister(0x06,0x0b);
+														MAX30100_writeRegister(0x01,0xf0);
+														MAX30100_writeRegister(0x09,0x33);
+														 break;
 											case 0x03:  Hour=buffer[3]; Minute=buffer[4];Second=buffer[5];
 														refreashDisplay();
 														break;
@@ -159,7 +166,7 @@ void main()
 					{
 						case 0x00 : switch(buffer[2])
 										{
-											case 0x02:  SMode=TimeMode;OLED_Clear(); 
+											case 0x02:  shutdown(); SMode=TimeMode;OLED_Clear(); 
 														refreashDisplay();
 											
 														break;

@@ -448,6 +448,16 @@
               <FileType>1</FileType>
               <FilePath>..\sourses\Timer.c</FilePath>
             </File>
+            <File>
+              <FileName>MSTP.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\sourses\MSTP.c</FilePath>
+            </File>
+            <File>
+              <FileName>Power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\sourses\Power.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
